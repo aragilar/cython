@@ -14,6 +14,7 @@ class TestMethodDispatcherTransform(unittest.TestCase):
         assert_widest(PT.c_int_type, PT.c_long_type, PT.c_long_type)
         assert_widest(PT.c_double_type, PT.c_long_type, PT.c_double_type)
         assert_widest(PT.c_longdouble_type, PT.c_long_type, PT.c_longdouble_type)
+        assert_widest(PT.c_longdouble_type, PT.c__Float128_type, PT.c__Float128_type)
 
         cenum = PT.CEnumType("E", "cenum", typedef_flag=False)
         assert_widest(PT.c_int_type, cenum, PT.c_int_type)

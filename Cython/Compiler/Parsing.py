@@ -2710,6 +2710,9 @@ special_basic_c_types = cython.declare(dict, {
     "ssize_t"    : (2, 0),
     "size_t"     : (0, 0),
     "ptrdiff_t"  : (2, 0),
+    "_Float32"   : (1, 0),
+    "_Float64"   : (1, 0),
+    "_Float128"  : (1, 0),
 })
 
 sign_and_longness_words = cython.declare(

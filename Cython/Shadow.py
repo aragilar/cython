@@ -383,7 +383,7 @@ py_complex = typedef(complex, "double complex")
 # Predefined types
 
 int_types = ['char', 'short', 'Py_UNICODE', 'int', 'Py_UCS4', 'long', 'longlong', 'Py_ssize_t', 'size_t']
-float_types = ['longdouble', 'double', 'float']
+float_types = ['longdouble', 'double', 'float', '_Float32', '_Float64', '_Float128']
 complex_types = ['longdoublecomplex', 'doublecomplex', 'floatcomplex', 'complex']
 other_types = ['bint', 'void']
 

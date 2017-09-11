@@ -132,7 +132,7 @@ def compile_cython_modules(profile=False, compile_more=False, cython_with_refnan
                 "Cython.Parser.ConcreteSyntaxTree",
             ])
 
-    defines = []
+    defines = [('__STDC_WANT_IEC_60559_TYPES_EXT__', '1')]
     if cython_with_refnanny:
         defines.append(('CYTHON_REFNANNY', '1'))
 

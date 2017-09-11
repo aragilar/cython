@@ -336,6 +336,9 @@ cdef extern from "numpy/arrayobject.h":
     ctypedef long double  npy_float80
     ctypedef long double  npy_float96
     ctypedef long double  npy_float128
+    ctypedef _Float32     npy_binary32
+    ctypedef _Float64     npy_binary64
+    ctypedef _Float128    npy_binary128
 
     ctypedef struct npy_cfloat:
         double real
@@ -765,6 +768,9 @@ ctypedef npy_uintp      uintp_t
 ctypedef npy_double     float_t
 ctypedef npy_double     double_t
 ctypedef npy_longdouble longdouble_t
+ctypedef npy_binary32   binary32_t
+ctypedef npy_binary64   binary64_t
+ctypedef npy_binary128  binary128_t
 
 ctypedef npy_cfloat      cfloat_t
 ctypedef npy_cdouble     cdouble_t

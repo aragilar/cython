@@ -4083,6 +4083,7 @@ rank_to_type_name = (
     "float",        # 5
     "double",       # 6
     "long double",  # 7
+    "_Float128",    # 8
 )
 
 _rank_to_type_name = list(rank_to_type_name)
@@ -4120,6 +4121,10 @@ c_slonglong_type =   CIntType(4, SIGNED)
 c_float_type =       CFloatType(5, math_h_modifier='f')
 c_double_type =      CFloatType(6)
 c_longdouble_type =  CFloatType(7, math_h_modifier='l')
+
+c__Float32_type =    CFloatType(5, math_h_modifier='f32')
+c__Float64_type =    CFloatType(6, math_h_modifier='f64')
+c__Float128_type =   CFloatType(8, math_h_modifier='f128')
 
 c_float_complex_type =      CComplexType(c_float_type)
 c_double_complex_type =     CComplexType(c_double_type)
@@ -4221,6 +4226,10 @@ modifiers_and_name_to_type = {
     (1,  0, "floatcomplex"):  c_float_complex_type,
     (1,  0, "doublecomplex"): c_double_complex_type,
     (1,  1, "doublecomplex"): c_longdouble_complex_type,
+
+    (1,  0, "_Float32"): c__Float32_type,
+    (1,  0, "_Float64"): c__Float64_type,
+    (1,  0, "_Float128"): c__Float128_type,
 
     #
     (1,  0, "void"): c_void_type,

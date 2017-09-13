@@ -312,6 +312,7 @@ static const char* __Pyx_BufFmt_DescribeTypeChar(char ch, int is_complex) {
     case 'f': return (is_complex ? "'complex float'" : "'float'");
     case 'd': return (is_complex ? "'complex double'" : "'double'");
     case 'g': return (is_complex ? "'complex long double'" : "'long double'");
+    case 'z': return (is_complex ? "'complex _Float128'" : "'_Float128'");
     case 'T': return "a struct";
     case 'O': return "Python object";
     case 'P': return "a pointer";
@@ -329,7 +330,7 @@ static size_t __Pyx_BufFmt_TypeCharToStandardSize(char ch, int is_complex) {
     case 'q': case 'Q': return 8;
     case 'f': return (is_complex ? 8 : 4);
     case 'd': return (is_complex ? 16 : 8);
-    case 'g': {
+    case 'g': case 'z': {
       PyErr_SetString(PyExc_ValueError, "Python does not define a standard format string size for long double ('g')..");
       return 0;
     }
@@ -352,6 +353,7 @@ static size_t __Pyx_BufFmt_TypeCharToNativeSize(char ch, int is_complex) {
     case 'f': return sizeof(float) * (is_complex ? 2 : 1);
     case 'd': return sizeof(double) * (is_complex ? 2 : 1);
     case 'g': return sizeof(long double) * (is_complex ? 2 : 1);
+    case 'z': return sizeof(_Float128) * (is_complex ? 2 : 1);
     case 'O': case 'P': return sizeof(void*);
     default: {
       __Pyx_BufFmt_RaiseUnexpectedChar(ch);
@@ -366,6 +368,7 @@ typedef struct { char c; long x; } __Pyx_st_long;
 typedef struct { char c; float x; } __Pyx_st_float;
 typedef struct { char c; double x; } __Pyx_st_double;
 typedef struct { char c; long double x; } __Pyx_st_longdouble;
+typedef struct { char c; _Float128 x; } __Pyx_st__Float128;
 typedef struct { char c; void *x; } __Pyx_st_void_p;
 #ifdef HAVE_LONG_LONG
 typedef struct { char c; PY_LONG_LONG x; } __Pyx_st_longlong;
@@ -383,6 +386,7 @@ static size_t __Pyx_BufFmt_TypeCharToAlignment(char ch, CYTHON_UNUSED int is_com
     case 'f': return sizeof(__Pyx_st_float) - sizeof(float);
     case 'd': return sizeof(__Pyx_st_double) - sizeof(double);
     case 'g': return sizeof(__Pyx_st_longdouble) - sizeof(long double);
+    case 'z': return sizeof(__Pyx_st__Float128) - sizeof(_Float128);
     case 'P': case 'O': return sizeof(__Pyx_st_void_p) - sizeof(void*);
     default:
       __Pyx_BufFmt_RaiseUnexpectedChar(ch);
@@ -400,6 +404,7 @@ typedef struct { long x; char c; } __Pyx_pad_long;
 typedef struct { float x; char c; } __Pyx_pad_float;
 typedef struct { double x; char c; } __Pyx_pad_double;
 typedef struct { long double x; char c; } __Pyx_pad_longdouble;
+typedef struct { _Float128 x; char c; } __Pyx_pad__Float128;
 typedef struct { void *x; char c; } __Pyx_pad_void_p;
 #ifdef HAVE_LONG_LONG
 typedef struct { PY_LONG_LONG x; char c; } __Pyx_pad_longlong;
@@ -417,6 +422,7 @@ static size_t __Pyx_BufFmt_TypeCharToPadding(char ch, CYTHON_UNUSED int is_compl
     case 'f': return sizeof(__Pyx_pad_float) - sizeof(float);
     case 'd': return sizeof(__Pyx_pad_double) - sizeof(double);
     case 'g': return sizeof(__Pyx_pad_longdouble) - sizeof(long double);
+    case 'z': return sizeof(__Pyx_pad__Float128) - sizeof(_Float128);
     case 'P': case 'O': return sizeof(__Pyx_pad_void_p) - sizeof(void*);
     default:
       __Pyx_BufFmt_RaiseUnexpectedChar(ch);
@@ -433,7 +439,7 @@ static char __Pyx_BufFmt_TypeCharToGroup(char ch, int is_complex) {
         return 'I';
     case 'B': case 'H': case 'I': case 'L': case 'Q':
         return 'U';
-    case 'f': case 'd': case 'g':
+    case 'f': case 'd': case 'g': case 'z':
         return (is_complex ? 'C' : 'R');
     case 'O':
         return 'O';
@@ -754,7 +760,7 @@ static const char* __Pyx_BufFmt_CheckString(__Pyx_BufFmt_Context* ctx, const cha
         /* fall through */
       case 'c': case 'b': case 'B': case 'h': case 'H': case 'i': case 'I':
       case 'l': case 'L': case 'q': case 'Q':
-      case 'f': case 'd': case 'g':
+      case 'f': case 'd': case 'g': case 'z':
       case 'O': case 'p':
         if (ctx->enc_type == *ts && got_Z == ctx->is_complex &&
             ctx->enc_packmode == ctx->new_packmode) {

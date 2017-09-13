@@ -898,4 +898,14 @@ def test_copy_buffer(np.ndarray[double, ndim=1] a):
     return a
 
 
+@testcase
+def test_binary128_buffer(np.ndarray[np.binary128_t, ndim=1] a):
+    """
+    >>> test_binary128_buffer(np.ones(10, dtype=np.binary128))
+    True
+    """
+    cdef _Float128[10] same_array = np.ones(10, dtype=np.binary128)
+    return all(a == same_array)
+
+
 include "numpy_common.pxi"

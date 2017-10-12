@@ -326,6 +326,8 @@ def get_openmp_compiler_flags(language):
     COMPILER_HAS_INT128 = getattr(sys, 'maxsize', getattr(sys, 'maxint', 0)) > 2**60
 
     compiler_version = gcc_version.group(1)
+    if compiler_version and compiler_version.split('.') >= ['7', '1']:
+        COMPILER_HAS__FLOAT128 = True
     if compiler_version and compiler_version.split('.') >= ['4', '2']:
         return '-fopenmp', '-fopenmp'
 
@@ -336,6 +338,7 @@ except locale.Error:
 
 COMPILER = None
 COMPILER_HAS_INT128 = False
+COMPILER_HAS__FLOAT128 = False
 OPENMP_C_COMPILER_FLAGS = get_openmp_compiler_flags('c')
 OPENMP_CPP_COMPILER_FLAGS = get_openmp_compiler_flags('cpp')
 
@@ -878,6 +881,11 @@ class CythonCompileTestCase(unittest.TestCase):
 
         if extra_compile_options is None:
             extra_compile_options = {}
+
+        if COMPILER_HAS__FLOAT128:
+            compile_env = extra_compile_options.get('cython_compile_time_env', {})
+            compile_env["HAS__FLOAT128"] = True
+            extra_compile_options['cython_compile_time_env'] = compile_env
 
         if 'allow_unknown_names' in self.tags['tag']:
             from Cython.Compiler import Options
